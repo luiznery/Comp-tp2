@@ -24,7 +24,7 @@ list<string>* link(list<list<string>*>* programs, map<string, int>* label_table)
                 linked_program->push_back(*token_it);
             else{
                 int label_address = label_table->find(*token_it)->second;
-                linked_program->push_back(to_string(label_address));
+                linked_program->push_back(to_string(label_address - pc));
             }
             pc++;
         }
@@ -72,9 +72,30 @@ void print_map(map<string,int>* m) {
     }
 }
 
+list<int>* get_program_addresses(list<list<string>*>* programs){
+    list<int>* program_addresses = new list<int>();
+    int count = 0;
+    for(list<list<string>*>::iterator program_it = programs->begin(); program_it != programs->end(); ++program_it){
+        program_addresses->push_back(count);
+        count += (*program_it)->size();
+    }
+    return program_addresses;
+}
+
+
+void print_list(list<int>* lista, string sep, string end){
+    for(auto it = lista->begin(); it!=(prev(lista->end())); it++){
+        cout << *it << sep;
+    }
+    cout << *(prev(lista->end()));
+    cout << end;
+}
+
+
 int main(int argc, char *argv[]) {
     list<string>* program1 = new list<string>();
     program1->push_back("lepo");
+    program1->push_back("lero");
     program1->push_back("1");
     program1->push_back("1");
     program1->push_back("1");
@@ -82,30 +103,27 @@ int main(int argc, char *argv[]) {
     program2->push_back("2");
     program2->push_back("2");
     program2->push_back("2");
-    program2->push_back("lero");
     list<list<string>*>* programs = new list<list<string>*>();
     programs->push_back(program1);
     programs->push_back(program2);
 
     map<string, int>* label_table = new map<string, int>();
-    label_table->insert(pair<string, int>("lepo", 0));
+    label_table->insert(pair<string, int>("lepo", 4));
 
     map<string, int>* label_table1 = new map<string, int>();
-    label_table1->insert(pair<string, int>("lero", 3));
+    label_table1->insert(pair<string, int>("lero", 2));
 
     list<map<string, int>*>* label_tables = new list<map<string, int>*>();
 
     label_tables->push_back(label_table);
     label_tables->push_back(label_table1);
-    list<int>* program_lengths = new list<int>();
-    program_lengths->push_back(0);
-    program_lengths->push_back(4);
+
+    list<int>* program_lengths = get_program_addresses(programs);
 
     map<string, int>* absolut_label_table = merge_label_tables(label_tables, program_lengths);
 
-    print_map(absolut_label_table);
-    //list<string>* linked_program = link(programs, label_table);
-    //print_list(linked_program, " ", "");
+    list<string>* linked_program = link(programs, absolut_label_table);
+    print_list(linked_program, " ", "");
 
     return 0;
 }
