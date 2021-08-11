@@ -29,10 +29,11 @@ list<string>::iterator get_element(list<string>* lista, int position) {
 }
 
 void print_list(list<string>* lista, string sep, string end){
-    for(auto it = lista->begin(); it!=lista->end(); it++){
-        cout<<*it<<sep;
+    for(auto it = lista->begin(); it!=(prev(lista->end())); it++){
+        cout << *it << sep;
     }
-    cout<<end;
+    cout << *(prev(lista->end()));
+    cout << end;
 }
 
 void print_list(list<int>* lista, string sep, string end){
@@ -53,9 +54,9 @@ void print_list_of_lists(list<list<string>*>* lista, string sep, string end){
 
 }
 
-void print_map(map<string,int>* m) {
+void print_map(map<string,int>* m, string sep) {
     for (const auto& x : (*m)) {
-        std::cout << x.first << ": " << x.second << "\n";
+        std::cout << x.first << sep << x.second << "\n";
     }
 }
 

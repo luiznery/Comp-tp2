@@ -23,12 +23,15 @@ int main(int argc, char *argv[]) {
     list<list<string>*>* processed_lines = process_lines(lines,label_table);
     
     // print_list_of_lists(processed_lines,"|","\n");    
-    // print_map(label_table);
     
-    list<int>* machine_code = assemble(processed_lines, code_map, label_table);
-    list<int>* stats = calculate_stats(machine_code, processed_lines);
+    list<string>* machine_code = assemble_intermediary(processed_lines, code_map);
+    // list<int>* stats = calculate_stats(machine_code, processed_lines);
 
-    print_on_format(machine_code, stats);
+    print_map(label_table, " ");
+    cout << endl;
+    print_list(machine_code, " ", "");
+
+    // print_on_format(machine_code, stats);
 
     return 0;
 }

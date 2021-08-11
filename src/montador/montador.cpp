@@ -157,7 +157,6 @@ row2ints(list<string>* row, map<string,int>* code_map, map<string,int>* label_ta
             out->push_back(
                 stoi(get_element(row,1)->substr(1, get_element(row,1)->size()))
             );
-            
         }
     }
     return out;
@@ -172,6 +171,73 @@ list<int>* assemble(list<list<string>*>* processed_lines, map<string,int>* code_
         for(auto it = line_code->begin(); it != line_code->end(); it++)
             machine_code->push_back(*it);
     }   
+    return machine_code;
+}
+
+bool is_register(string text ) {
+    if(text == "R0" || text == "R1" || text == "R2" || text == "R3" )
+        return true;
+    return false;
+}
+
+list<string>*
+row2strings(list<string>* row, map<string,int>* code_map){
+    list<string>* out = new list<string>;
+
+    //obtem o operador
+    string op = *get_element(row,0);
+    if(op=="END")
+        return out;
+    
+    if(op=="WORD"){
+        out->push_back(*get_element(row,1));
+        return out;
+    }
+
+    string code = to_string(code_map->find(op)->second);
+    out->push_back(code);
+    
+    //trata os operandos
+    if (row->size() == 3){ //1 operador + 2 operandos
+        out->push_back( //adiciona primeiro operando
+            get_element(row,1)->substr( 1, get_element(row,1)->size() )
+        );
+        
+        // Adiciona o segundo operando
+        if (is_register(*get_element(row,2))) //se segundo operando for registrador
+            out->push_back( 
+                get_element(row,2)->substr(1, get_element(row,2)->size()) 
+            );
+        else //se nao for registrador -> label
+            out->push_back(*get_element(row,2)); 
+        
+        return out;
+    }
+
+    if (row->size() == 2) { //1 operador + 1 operando
+        if ( is_register( *get_element(row, 1) ) ) //se for registrador
+            out->push_back(
+                get_element(row,1)->substr(1, get_element(row,1)->size())
+            );
+            
+        else
+            out->push_back(*get_element(row,1));
+
+        return out;
+    }
+    return out;
+}
+
+list<string>* 
+assemble_intermediary(list<list<string>*>* processed_lines, map<string,int>* code_map) {
+    list<string>* machine_code = new list<string>;
+
+    for(auto line_it = processed_lines->begin(); line_it != processed_lines->end(); line_it++){
+        list<string>* line_code = row2strings(*line_it, code_map);
+        for(auto it = line_code->begin(); it != line_code->end(); it++)
+            machine_code->push_back(*it);
+    }   
+
     return machine_code;
 }
 
