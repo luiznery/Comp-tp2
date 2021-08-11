@@ -13,6 +13,6 @@ void print_list_of_lists(list<list<string>*>* lista, string sep, string end);
 void print_map(map<string, int>* m);
 list<string>* split(string text, char separator);
 int find(string text, char c);
-void print_on_format(list<int>* machine_code, list<int>* stats);
+void print_on_format(list<string>* machine_code, list<int>* stats);
 
 #endif

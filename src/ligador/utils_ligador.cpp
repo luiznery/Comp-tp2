@@ -98,7 +98,7 @@ int find(string text, char c){
     return -1;
 }
 
-void print_on_format(list<int>* machine_code, list<int>* stats){
+void print_on_format(list<string>* machine_code, list<int>* stats){
     cout << "MV-EXE" << endl << endl;
     print_list(stats, " ", "\n\n");
     print_list(machine_code, " ", "");

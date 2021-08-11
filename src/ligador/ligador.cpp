@@ -65,3 +65,17 @@ list<int>* get_program_addresses(list<list<string>*>* programs){
     }
     return program_addresses;
 }
+
+
+list<int>* calculate_stats(list<string>* machine_code, map<string, int>* label_table){
+    int n = machine_code->size();
+    int pc_begin = label_table->find("main")->second;
+    
+    list<int>* stats = new list<int>; // n, CODE_BEGIN, (n + CODE_BEGIN + STACK_SIZE), pc_begin
+    stats->push_back(n);
+    stats->push_back(CODE_BEGIN);
+    stats->push_back(n + CODE_BEGIN + STACK_SIZE);
+    stats->push_back(pc_begin);
+    
+    return stats;
+}
